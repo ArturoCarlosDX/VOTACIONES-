@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, AlertCircle, Trash2, Download, Play } from 'lucide-react';
+import { Upload, AlertCircle, Trash2, Download, Play, BarChart3, AlertTriangle } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Progress } from './ui/progress';
@@ -175,7 +175,7 @@ export function DataAnalysis() {
 
 	      <TabsContent value="load">
 	        <CardContent>
-	          <div className="border-2 border-dashed border-border rounded-lg p-8 text-center w-[1350px] h-[550px] mx-auto flex flex-col justify-center items-center">
+	          <div className="border-2 border-dashed border-border rounded-lg p-4 text-center w-full mx-auto flex justify-center gap-4 items-center">
 	            <input
 	              ref={fileInputRef}
 	              type="file"
@@ -183,13 +183,13 @@ export function DataAnalysis() {
 	              onChange={handleFileUpload}
 	              className="hidden"
 	            />
-	            <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-	            <p className="text-sm text-muted-foreground mb-4">
-	              Arrastra un archivo CSV o haz clic para seleccionar
-	            </p>
 	            <Button onClick={() => fileInputRef.current?.click()}>
+			          <Upload className="mx-auto"/>
 	              Seleccionar archivo
 	            </Button>
+	            <p className="text-sm text-muted-foreground">
+	              Arrastra un archivo CSV o haz clic para seleccionar
+	            </p>
 	          </div>
 
 	          {csvData && (
@@ -223,10 +223,24 @@ export function DataAnalysis() {
 	      {csvData && quality && (
 	        <TabsContent value="quality">
 	          <CardContent>
-	            <div className="grid md:grid-cols-3 gap-4 mb-6">
+	            <div className="grid md:grid-cols-5 gap-4 mb-6">
+	              <div className="bg-primary/10 p-4 rounded-lg">
+	                <div className="flex items-center gap-2 mb-2">
+	                  <BarChart3 className="w-5 h-5 text-primary" />
+	                  <span className="font-medium">Total Regitros</span>
+	                </div>
+	                <p className="text-2xl font-bold">{quality.nulls}</p>
+	              </div>
 	              <div className="bg-destructive/10 p-4 rounded-lg">
 	                <div className="flex items-center gap-2 mb-2">
 	                  <AlertCircle className="w-5 h-5 text-destructive" />
+	                  <span className="font-medium">Problemas</span>
+	                </div>
+	                <p className="text-2xl font-bold">{quality.nulls}</p>
+	              </div>
+	              <div className="bg-gray-500/10 dark:bg-gray-100/10 p-4 rounded-lg">
+	                <div className="flex items-center gap-2 mb-2">
+	                  <AlertTriangle className="w-5 h-5 text-gray-500" />
 	                  <span className="font-medium">Valores Nulos</span>
 	                </div>
 	                <p className="text-2xl font-bold">{quality.nulls}</p>

@@ -126,25 +126,79 @@ export function AdminResults() {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Evolución de Votos (Serie Temporal)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={timeSeriesData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="votos" stroke="hsl(var(--primary))" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+	      <Card>
+	        <CardHeader>
+	          <CardTitle>Resultados - Presidente</CardTitle>
+	        </CardHeader>
+	        <CardContent>
+	          <ResponsiveContainer width="100%" height={300}>
+	            <BarChart data={chartData}>
+	              <CartesianGrid strokeDasharray="3 3" />
+	              <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
+	              <YAxis />
+	              <Tooltip />
+	              <Legend />
+	              <Bar dataKey="votos" fill="hsl(var(--primary))" />
+	            </BarChart>
+	          </ResponsiveContainer>
+	        </CardContent>
+	      </Card>
+
+	      <Card>
+	        <CardHeader>
+	          <CardTitle>Resultados - Alcalde</CardTitle>
+	        </CardHeader>
+	        <CardContent>
+	          <ResponsiveContainer width="100%" height={300}>
+	            <BarChart data={chartData}>
+	              <CartesianGrid strokeDasharray="3 3" />
+	              <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
+	              <YAxis />
+	              <Tooltip />
+	              <Legend />
+	              <Bar dataKey="votos" fill="hsl(var(--primary))" />
+	            </BarChart>
+	          </ResponsiveContainer>
+	        </CardContent>
+	      </Card>
+
+				<Card>
+	        <CardHeader>
+	          <CardTitle>Participación por Zona</CardTitle>
+	        </CardHeader>
+	        <CardContent>
+	          <ResponsiveContainer width="100%" height={300}>
+	            <LineChart data={timeSeriesData}>
+	              <CartesianGrid strokeDasharray="3 3" />
+	              <XAxis dataKey="time" />
+	              <YAxis />
+	              <Tooltip />
+	              <Legend />
+	              <Line type="monotone" dataKey="votos" stroke="hsl(var(--primary))" strokeWidth={2} />
+	            </LineChart>
+	          </ResponsiveContainer>
+	        </CardContent>
+	     	</Card>
+
+	      <Card>
+	        <CardHeader>
+	          <CardTitle>Evolución de Votos (Serie Temporal)</CardTitle>
+	        </CardHeader>
+	        <CardContent>
+	          <ResponsiveContainer width="100%" height={300}>
+	            <LineChart data={timeSeriesData}>
+	              <CartesianGrid strokeDasharray="3 3" />
+	              <XAxis dataKey="time" />
+	              <YAxis />
+	              <Tooltip />
+	              <Legend />
+	              <Line type="monotone" dataKey="votos" stroke="hsl(var(--primary))" strokeWidth={2} />
+	            </LineChart>
+	          </ResponsiveContainer>
+	        </CardContent>
+	      </Card>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-4">
         <Card>
