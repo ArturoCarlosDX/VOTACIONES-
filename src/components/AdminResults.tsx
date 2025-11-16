@@ -12,8 +12,8 @@ export function AdminResults() {
   const { candidates } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'presidencia' | 'alcaldia'>('all');
 
-  const filteredCandidates = selectedCategory === 'all' 
-    ? candidates 
+  const filteredCandidates = selectedCategory === 'all'
+    ? candidates
     : candidates.filter(c => c.category === selectedCategory);
 
   const chartData = filteredCandidates.map(c => ({
@@ -53,7 +53,7 @@ export function AdminResults() {
       ctx.font = '24px Arial';
       ctx.fillText('Resultados Electorales', 50, 50);
     }
-    
+
     const link = document.createElement('a');
     link.download = 'resultados-electorales.png';
     link.href = canvas.toDataURL();
@@ -157,20 +157,38 @@ export function AdminResults() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Candidatos</CardTitle>
+            <CardTitle className="text-sm">Presidente Lider</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{filteredCandidates.length}</p>
+            <p className="text-3xl font-bold">{totalVotes}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Participación</CardTitle>
+            <CardTitle className="text-sm">Alcalde Lider</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{totalVotes > 0 ? '87%' : '0%'}</p>
+            <p className="text-3xl font-bold">{totalVotes}</p>
           </CardContent>
         </Card>
+        <div className="grid gap-4 grid-cols-2 col-span-3">
+	        <Card>
+	          <CardHeader>
+	            <CardTitle className="text-sm">Candidatos</CardTitle>
+	          </CardHeader>
+	          <CardContent>
+	            <p className="text-3xl font-bold">{filteredCandidates.length}</p>
+	          </CardContent>
+	        </Card>
+	        <Card>
+	          <CardHeader>
+	            <CardTitle className="text-sm">Participación</CardTitle>
+	          </CardHeader>
+	          <CardContent>
+	            <p className="text-3xl font-bold">{totalVotes > 0 ? '87%' : '0%'}</p>
+	          </CardContent>
+	        </Card>
+        </div>
       </div>
     </div>
   );
