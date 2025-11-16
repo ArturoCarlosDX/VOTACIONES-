@@ -36,6 +36,9 @@ export function DataAnalysis() {
   const [modelMetrics, setModelMetrics] = useState<ModelMetrics | null>(null);
   const [modelType, setModelType] = useState('random-forest');
   const [testSplit, setTestSplit] = useState('0.2');
+  const [activeSection, setActiveSection] = useState<
+    "load"
+  >("load");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,11 +161,11 @@ export function DataAnalysis() {
     toast.success('Resultados exportados exitosamente');
   };
 
-  return (
+	return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">Análisis de Datos y Modelado</h2>
 
-      <Tabs>
+      <Tabs defaultValue='load'>
         <TabsList className="grid w-full mx-auto grid-cols-4 mb-8">
           <TabsTrigger value="load">Cargar Datos</TabsTrigger>
           <TabsTrigger value="quality">Análisis de Calidad de Datos</TabsTrigger>
