@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, TrendingUp, Users } from "lucide-react";
+import { CheckCircle2, TrendingUp, Users, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { useApp } from "@/contexts/AppContext";
 import {
@@ -141,7 +141,7 @@ export function UserResults() {
           Resultados Generales
         </h2>
 
-        
+
 
         <Card>
           <CardHeader>
@@ -363,35 +363,77 @@ export function UserResults() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Participación
-              </CardTitle>
+              <CardTitle className="text-sm font-medium">Presidente Lider</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {Math.max(totalPresidenciaVotes, totalAlcaldiaVotes) > 0
-                  ? "87%"
-                  : "0%"}
+                {totalPresidenciaVotes + totalAlcaldiaVotes}
               </div>
-              <p className="text-xs text-muted-foreground">Estimado</p>
+              <p className="text-xs text-muted-foreground">
+              	0 votos
+              </p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                Última Actualización
-              </CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium">Alcalde Lider</CardTitle>
+              <MapPin className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {new Date().toLocaleTimeString()}
+                {totalPresidenciaVotes + totalAlcaldiaVotes}
               </div>
-              <p className="text-xs text-muted-foreground">Tiempo real</p>
+              <p className="text-xs text-muted-foreground">
+                0 votos
+              </p>
             </CardContent>
           </Card>
+
+          {/*<Card className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Presidente Líder</p>
+                <p className="text-lg font-bold text-card-foreground">{topPresident.name}</p>
+                <p className="text-sm text-muted-foreground">{topPresident.votes || 0} votos</p>
+              </div>
+              <TrendingUp className="h-12 w-12 text-success/20" />
+            </div>
+          </Card>*/}
+
+          <div className="grid gap-4 grid-cols-2 col-span-3">
+	          <Card>
+	            <CardHeader className="flex flex-row items-center justify-between pb-2">
+	              <CardTitle className="text-sm font-medium">
+	                Participación
+	              </CardTitle>
+	              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+	            </CardHeader>
+	            <CardContent>
+	              <div className="text-2xl font-bold">
+	                {Math.max(totalPresidenciaVotes, totalAlcaldiaVotes) > 0
+	                  ? "87%"
+	                  : "0%"}
+	              </div>
+	              <p className="text-xs text-muted-foreground">Estimado</p>
+	            </CardContent>
+	          </Card>
+	          <Card>
+	            <CardHeader className="flex flex-row items-center justify-between pb-2">
+	              <CardTitle className="text-sm font-medium">
+	                Última Actualización
+	              </CardTitle>
+	              <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+	            </CardHeader>
+	            <CardContent>
+	              <div className="text-2xl font-bold">
+	                {new Date().toLocaleTimeString()}
+	              </div>
+	              <p className="text-xs text-muted-foreground">Tiempo real</p>
+	            </CardContent>
+	          </Card>
+          </div>
         </div>
       </section>
     </div>
