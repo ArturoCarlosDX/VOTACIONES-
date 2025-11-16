@@ -172,7 +172,7 @@ export function DataAnalysis() {
 
 	      <TabsContent value="load">
 	        <CardContent>
-	          <div className="border-2 border-dashed border-border rounded-lg p-8 text-center">
+	          <div className="border-2 border-dashed border-border rounded-lg p-8 text-center w-[1350px] h-[550px] mx-auto flex flex-col justify-center items-center">
 	            <input
 	              ref={fileInputRef}
 	              type="file"

@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { useApp } from '@/contexts/AppContext';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { useApp } from "@/contexts/AppContext";
+import { toast } from "sonner";
 
 interface AdminAuthModalProps {
   open: boolean;
@@ -13,41 +13,41 @@ interface AdminAuthModalProps {
 }
 
 export function AdminAuthModal({ open, onClose }: AdminAuthModalProps) {
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [registerName, setRegisterName] = useState('');
-  const [registerEmail, setRegisterEmail] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [registerName, setRegisterName] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+
   const { loginAdmin, registerAdmin } = useApp();
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (loginAdmin(loginEmail, loginPassword)) {
-      toast.success('¡Bienvenido al panel de administración!');
-      navigate('/admin');
+      toast.success("¡Bienvenido al panel de administración!");
+      navigate("/admin");
       onClose();
-      setLoginEmail('');
-      setLoginPassword('');
+      setLoginEmail("");
+      setLoginPassword("");
     } else {
-      toast.error('Credenciales incorrectas');
+      toast.error("Credenciales incorrectas");
     }
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (registerAdmin(registerName, registerEmail, registerPassword)) {
-      toast.success('¡Cuenta creada exitosamente!');
-      navigate('/admin');
+      toast.success("¡Cuenta creada exitosamente!");
+      navigate("/admin");
       onClose();
-      setRegisterName('');
-      setRegisterEmail('');
-      setRegisterPassword('');
+      setRegisterName("");
+      setRegisterEmail("");
+      setRegisterPassword("");
     } else {
-      toast.error('El correo ya está registrado');
+      toast.error("El correo ya está registrado");
     }
   };
 
@@ -55,32 +55,40 @@ export function AdminAuthModal({ open, onClose }: AdminAuthModalProps) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-2xl text-center">Panel de Administración</DialogTitle>
+          <DialogTitle className="text-2xl text-center">
+            Panel de Administración
+          </DialogTitle>
         </DialogHeader>
-        
+
         <Tabs defaultValue="login" className="mt-4">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Ingresar</TabsTrigger>
             <TabsTrigger value="register">Registrarse</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label htmlFor="login-email" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="login-email"
+                  className="block text-sm font-medium mb-2"
+                >
                   Correo electrónico
                 </label>
                 <Input
                   id="login-email"
                   type="email"
-                  placeholder="admin@demo.com"
+                  placeholder="admin@gmail.com"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   required
                 />
               </div>
               <div>
-                <label htmlFor="login-password" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="login-password"
+                  className="block text-sm font-medium mb-2"
+                >
                   Contraseña
                 </label>
                 <Input
@@ -92,19 +100,20 @@ export function AdminAuthModal({ open, onClose }: AdminAuthModalProps) {
                   required
                 />
               </div>
-              <p className="text-xs text-muted-foreground">
-                Demo: admin@demo.com / Demo123!
-              </p>
+            
               <Button type="submit" className="w-full">
                 Ingresar
               </Button>
             </form>
           </TabsContent>
-          
+
           <TabsContent value="register">
             <form onSubmit={handleRegister} className="space-y-4">
               <div>
-                <label htmlFor="register-name" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="register-name"
+                  className="block text-sm font-medium mb-2"
+                >
                   Nombre completo
                 </label>
                 <Input
@@ -117,7 +126,10 @@ export function AdminAuthModal({ open, onClose }: AdminAuthModalProps) {
                 />
               </div>
               <div>
-                <label htmlFor="register-email" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="register-email"
+                  className="block text-sm font-medium mb-2"
+                >
                   Correo electrónico
                 </label>
                 <Input
@@ -130,7 +142,10 @@ export function AdminAuthModal({ open, onClose }: AdminAuthModalProps) {
                 />
               </div>
               <div>
-                <label htmlFor="register-password" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="register-password"
+                  className="block text-sm font-medium mb-2"
+                >
                   Contraseña
                 </label>
                 <Input

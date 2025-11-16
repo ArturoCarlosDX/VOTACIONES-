@@ -1,8 +1,14 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { CheckCircle2, ExternalLink } from "lucide-react";
+import { Button } from "./ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,17 +18,50 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from './ui/alert-dialog';
-import { useApp } from '@/contexts/AppContext';
-import { toast } from 'sonner';
+} from "./ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./ui/dialog";
+import { useApp } from "@/contexts/AppContext";
+import { toast } from "sonner";
 
-export function VotingSection() {
+export function VotingSection({
+  onlyCategory,
+}: {
+  onlyCategory?: "presidencia" | "alcaldia";
+}) {
   const { candidates, userSession, voteForCandidate } = useApp();
-  const [selectedCandidate, setSelectedCandidate] = useState<string | null>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<string | null>(
+    null
+  );
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [proposalDialogOpen, setProposalDialogOpen] = useState(false);
+  const [proposalCandidate, setProposalCandidate] = useState<
+    (typeof candidates)[0] | null
+  >(null);
 
-  const presidenciaCandidates = candidates.filter(c => c.category === 'presidencia');
-  const alcaldiaCandidates = candidates.filter(c => c.category === 'alcaldia');
+  const presidenciaCandidates = candidates.filter(
+    (c) => c.category === "presidencia"
+  );
+  const alcaldiaCandidates = candidates.filter(
+    (c) => c.category === "alcaldia"
+  );
+
+  // Debug: log presidencia candidate images to help diagnose loading issues
+  useEffect(() => {
+    try {
+      console.debug(
+        "[VotingSection] Presidencia images:",
+        presidenciaCandidates.map((c) => ({ id: c.id, image: c.image }))
+      );
+    } catch (e) {
+      console.debug("[VotingSection] Error logging presidencia images", e);
+    }
+  }, [presidenciaCandidates]);
 
   const handleVoteClick = (candidateId: string) => {
     setSelectedCandidate(candidateId);
@@ -32,55 +71,116 @@ export function VotingSection() {
   const handleConfirmVote = () => {
     if (selectedCandidate) {
       voteForCandidate(selectedCandidate);
-      const candidate = candidates.find(c => c.id === selectedCandidate);
+      const candidate = candidates.find((c) => c.id === selectedCandidate);
       toast.success(`¡Voto registrado exitosamente por ${candidate?.name}!`);
       setConfirmDialogOpen(false);
       setSelectedCandidate(null);
     }
   };
 
-  const CandidateCard = ({ candidate }: { candidate: typeof candidates[0] }) => {
-    const hasVoted = candidate.category === 'presidencia' 
-      ? userSession?.votedPresidencia 
-      : userSession?.votedAlcaldia;
+  const CandidateCard = ({
+    candidate,
+  }: {
+    candidate: (typeof candidates)[0];
+  }) => {
+    const votedInCategoryId =
+      candidate.category === "presidencia"
+        ? userSession?.votedPresidencia
+        : userSession?.votedAlcaldia;
+
+    const categoryVoted = !!votedInCategoryId; // user has voted in this category
+    const isVotedCandidate =
+      typeof votedInCategoryId === "string" &&
+      votedInCategoryId === candidate.id; // this candidate is the one user voted for
 
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: hasVoted ? 1 : 1.02 }}
-        transition={{ duration: 0.2 }}
+        whileHover={{ scale: categoryVoted && !isVotedCandidate ? 1 : 1.01 }}
+        transition={{ duration: 0.18 }}
       >
-        <Card className={hasVoted ? 'opacity-60' : ''}>
-          <CardHeader>
-            <div className="flex items-start gap-4">
-              <img
-                src={candidate.image}
-                alt={candidate.name}
-                className="w-20 h-20 rounded-full object-cover border-2 border-border"
-              />
-              <div className="flex-1">
-                <CardTitle className="text-xl mb-1">{candidate.name}</CardTitle>
-                <CardDescription className="font-medium">{candidate.party}</CardDescription>
+        <Card
+          className={`overflow-hidden rounded-xl shadow-md max-w-sm mx-auto ${
+            categoryVoted && !isVotedCandidate ? "opacity-60" : ""
+          }`}
+        >
+
+
+          {/* Image banner */}
+          <div className="relative w-full rounded-t-xl"
+            style={{
+            backgroundImage: "url('/images/fondo.jpg')",
+            backgroundSize: "cover",
+              backgroundPosition: "center",
+              height: "120px",  // altura real para mostrar fondo
+              }}>
+            <img
+              src={candidate.image}
+              alt={candidate.name}
+              className="w-24 h-24 rounded-full object-cover border"
+              onError={(e) => {
+                const target = e.currentTarget as HTMLImageElement;
+                // fallback image when remote URL fails
+                target.onerror = null;
+                target.src =
+                  "https://via.placeholder.com/600x400?text=Sin+imagen";
+              }}
+              loading="lazy"
+            />
+            <div className="absolute left-4 bottom-3">
+              <div className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-blue-600 text-white shadow-sm">
+                {candidate.party}
               </div>
             </div>
-          </CardHeader>
+          </div>
+
+
+
           <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">{candidate.description}</p>
-            <Button
-              className="w-full"
-              disabled={hasVoted}
-              onClick={() => handleVoteClick(candidate.id)}
-            >
-              {hasVoted ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4 mr-2" />
-                  Ya votaste
-                </>
-              ) : (
-                'Votar'
-              )}
-            </Button>
+            <div className="mt-2">
+              <CardTitle className="text-lg font-semibold mb-1">
+                {candidate.name}
+              </CardTitle>
+              <div className="text-sm text-primary font-medium mb-2">
+                {candidate.role ||
+                  (candidate.category === "presidencia"
+                    ? "Presidente"
+                    : "Alcalde")}
+              </div>
+              <p className="text-sm text-muted-foreground mb-4 max-h-14 overflow-hidden">
+                {candidate.description}
+              </p>
+
+              <div className="flex items-center gap-3">
+                <Button
+                  className="flex-1"
+                  disabled={categoryVoted && !isVotedCandidate}
+                  onClick={() => handleVoteClick(candidate.id)}
+                >
+                  {isVotedCandidate ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Tu voto
+                    </>
+                  ) : (
+                    "Votar"
+                  )}
+                </Button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProposalCandidate(candidate);
+                    setProposalDialogOpen(true);
+                  }}
+                  className="inline-flex items-center text-sm text-muted-foreground hover:text-primary"
+                >
+                  Ver propuestas
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </button>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </motion.div>
@@ -90,46 +190,55 @@ export function VotingSection() {
   return (
     <div className="space-y-12">
       {/* Presidencia */}
-      <section>
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Elección Presidencial</h2>
-          <p className="text-muted-foreground">
-            {userSession?.votedPresidencia 
-              ? '✓ Ya has votado en esta categoría' 
-              : 'Selecciona tu candidato para presidente'}
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {presidenciaCandidates.map(candidate => (
-            <CandidateCard key={candidate.id} candidate={candidate} />
-          ))}
-        </div>
-      </section>
+      {(onlyCategory === undefined || onlyCategory === "presidencia") && (
+        <section>
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
+              Elección Presidencial
+            </h2>
+            <p className="text-muted-foreground">
+              {userSession?.votedPresidencia
+                ? "✓ Ya has votado en esta categoría"
+                : "Selecciona tu candidato para presidente"}
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {presidenciaCandidates.map((candidate) => (
+              <CandidateCard key={candidate.id} candidate={candidate} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Alcaldía */}
-      <section>
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-foreground mb-2">Elección de Alcalde</h2>
-          <p className="text-muted-foreground">
-            {userSession?.votedAlcaldia 
-              ? '✓ Ya has votado en esta categoría' 
-              : 'Selecciona tu candidato para alcalde'}
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {alcaldiaCandidates.map(candidate => (
-            <CandidateCard key={candidate.id} candidate={candidate} />
-          ))}
-        </div>
-      </section>
+      {(onlyCategory === undefined || onlyCategory === "alcaldia") && (
+        <section>
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-foreground mb-2">
+              Elección de Alcalde
+            </h2>
+            <p className="text-muted-foreground">
+              {userSession?.votedAlcaldia
+                ? "✓ Ya has votado en esta categoría"
+                : "Selecciona tu candidato para alcalde"}
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {alcaldiaCandidates.map((candidate) => (
+              <CandidateCard key={candidate.id} candidate={candidate} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <AlertDialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar voto</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres votar por {candidates.find(c => c.id === selectedCandidate)?.name}? 
-              Esta acción no se puede deshacer.
+              ¿Estás seguro de que quieres votar por{" "}
+              {candidates.find((c) => c.id === selectedCandidate)?.name}? Esta
+              acción no se puede deshacer.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -140,6 +249,69 @@ export function VotingSection() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog open={proposalDialogOpen} onOpenChange={setProposalDialogOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Propuestas</DialogTitle>
+          </DialogHeader>
+          {proposalCandidate && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+              <div className="h-56 md:h-auto overflow-hidden rounded-lg">
+                <img
+                  src={proposalCandidate.image}
+                  alt={proposalCandidate.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src =
+                      "https://via.placeholder.com/600x400?text=Sin+imagen";
+                  }}
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <div className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-blue-600 text-white shadow-sm mb-3">
+                  {proposalCandidate.party}
+                </div>
+                <h3 className="text-xl font-semibold">
+                  {proposalCandidate.name}
+                </h3>
+                <p className="text-sm text-primary font-medium mb-4">
+                  {proposalCandidate.role ||
+                    (proposalCandidate.category === "presidencia"
+                      ? "Presidente"
+                      : "Alcalde")}
+                </p>
+                <div className="prose max-w-none text-sm text-muted-foreground">
+                  {/* usando description como propuesta si no existe campo específico */}
+                  <p>{proposalCandidate.description}</p>
+                </div>
+                <div className="mt-6 flex items-center gap-3">
+                  <Button
+                    onClick={() => {
+                      if (!proposalCandidate) return;
+                      setSelectedCandidate(proposalCandidate.id);
+                      setProposalDialogOpen(false);
+                      setConfirmDialogOpen(true);
+                    }}
+                    className="mr-2"
+                  >
+                    Votar
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setProposalDialogOpen(false)}
+                  >
+                    Cerrar
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
