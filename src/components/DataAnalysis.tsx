@@ -168,9 +168,9 @@ export function DataAnalysis() {
       <Tabs defaultValue='load'>
         <TabsList className="grid w-full mx-auto grid-cols-4 mb-8">
           <TabsTrigger value="load">Cargar Datos</TabsTrigger>
-          <TabsTrigger value="quality">Análisis de Calidad de Datos</TabsTrigger>
-          <TabsTrigger value="training">Entrenar Modelos</TabsTrigger>
-          <TabsTrigger value="results">Ver Resultados</TabsTrigger>
+          <TabsTrigger value="quality" disabled={csvData === null && quality === null}>Análisis de Calidad de Datos</TabsTrigger>
+          <TabsTrigger value="training" disabled={csvData === null && quality === null}>Entrenar Modelos</TabsTrigger>
+          <TabsTrigger value="results" disabled={modelMetrics === null}>Ver Resultados</TabsTrigger>
         </TabsList>
 
 	      <TabsContent value="load">
@@ -277,6 +277,31 @@ export function DataAnalysis() {
 	                Imputar por Mediana
 	              </Button>
 	            </div>
+
+		          {csvData && (
+		            <div className="mt-6">
+		              <div className="overflow-auto max-h-96 border rounded-lg">
+		                <Table>
+		                  <TableHeader>
+		                    <TableRow>
+		                      {csvData.headers.map((header, i) => (
+		                        <TableHead key={i}>{header}</TableHead>
+		                      ))}
+		                    </TableRow>
+		                  </TableHeader>
+		                  <TableBody>
+		                    {csvData.rows.map((row, i) => (
+		                      <TableRow key={i}>
+		                        {row.map((cell, j) => (
+		                          <TableCell key={j}>{cell}</TableCell>
+		                        ))}
+		                      </TableRow>
+		                    ))}
+		                  </TableBody>
+		                </Table>
+		              </div>
+		            </div>
+		          )}
 	          </CardContent>
 	        </TabsContent>
 	      )}
@@ -340,6 +365,31 @@ export function DataAnalysis() {
 	                </p>
 	              </div>
 	            )}
+
+		          {csvData && (
+		            <div className="mt-6">
+		              <div className="overflow-auto max-h-96 border rounded-lg">
+		                <Table>
+		                  <TableHeader>
+		                    <TableRow>
+		                      {csvData.headers.map((header, i) => (
+		                        <TableHead key={i}>{header}</TableHead>
+		                      ))}
+		                    </TableRow>
+		                  </TableHeader>
+		                  <TableBody>
+		                    {csvData.rows.map((row, i) => (
+		                      <TableRow key={i}>
+		                        {row.map((cell, j) => (
+		                          <TableCell key={j}>{cell}</TableCell>
+		                        ))}
+		                      </TableRow>
+		                    ))}
+		                  </TableBody>
+		                </Table>
+		              </div>
+		            </div>
+		          )}
 	          </CardContent>
 	        </TabsContent>
 	      )}

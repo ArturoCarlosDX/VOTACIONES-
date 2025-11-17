@@ -195,43 +195,8 @@ export default function Landing() {
 	                  </div>
 	                </div>
 	              </Card>
-	              <Card className="p-8">
-	                <div className="space-y-4">
-	                  <div>
-	                    <h4 className="mb-2 font-semibold text-lg text-card-foreground">1. Da click en "Ingresar como Votante".</h4>
-	                  </div>
-										<div>
-	                    <h4 className="mb-2 font-semibold text-lg text-card-foreground">2. Se abre una ventana donde ingresa su DNI.</h4>
-										</div>
-										<div>
-	                    <h4 className="mb-2 font-semibold text-lg text-card-foreground">3. El sistema valida el DNI y lo lleva al Panel de Votación.</h4>
-										</div>
-	                  <div>
-	                    <h4 className="mb-2 font-semibold text-lg text-card-foreground">4. El usuario elige la categoría donde quiere votar.</h4>
-	                    <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-	                      <li>Presidencia</li>
-	                      <li>Alcaldía</li>
-	                    </ul>
-	                  </div>
-										<div>
-											<h4 className="mb-2 font-semibold text-lg text-card-foreground">5. En cada categoría ve la lista de candidatos con su foto, nombre y botón de "Votar".</h4>
-										</div>
-										<div>
-           						<h4 className="mb-2 font-semibold text-lg text-card-foreground">6. El usuario selecciona un candidato y confirma su voto en una ventana emergente.</h4>
-										</div>
-										<div>
-            					<h4 className="mb-2 font-semibold text-lg text-card-foreground">7. El sistema registra el voto y marca la categoría como “Voto realizado”.</h4>
-										</div>
-	                  <div>
-                			<h4 className="mb-2 font-semibold text-lg text-card-foreground">8. El usuario puede ir a “Mis Resultados” para ver:</h4>
-	                    <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-	                      <li>A quién votó</li>
-	                    </ul>
-	                  </div>
-										<div>
-											<h4 className="mb-2 font-semibold text-lg text-card-foreground">9. Finalmente, puede cerrar sesión o regresar al menú principal.</h4>
-										</div>
-	                </div>
+	              <Card className="p-2">
+<iframe className="w-full h-full focus-visible:outline-none" src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=FFFFFF&layers=1&nav=1&transparent=1&dark=auto#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%22gGuT3AzqFFvegHEhMBOz%22%3E7Vzbdps4FP0aP6aL%2B%2BUxcdKZzprpZDVr0vZRBtnWFCMP4MTp148EkgEBBhNAsdPkISAkIXS29rnoKDN9vtn%2FFoHt%2Bi%2Fsw2CmKf5%2Bpt%2FONE1TVYX8oSUvWYmqumZWsoqQz8ryggf0E7JC1nC1Qz6MSxUTjIMEbcuFHg5D6CWlMhBF%2BLlcbYmD8lu3YAUrBQ8eCKqlX5GfrLNSx1Ty8t8hWq35m1WFPdkAXpkVxGvg4%2BdCkX430%2BcRxkl2tdnPYUBnj89L1u5jw9PDwCIYJl0a3H%2F9%2Bw9FM6NH%2B4exAV%2B2T8G3b1d21ssTCHbsg2eaFZD%2Bbnz0RC5X9PJTuIpgDKJ0mjeY%2FHnECQgTyOuSlxaqs89NXvgcRngX%2BpAOQyGPn9cogQ9b4NGnzwQ2pGydbAJyp5LLEP8JFjBglTcwAXc%2BStjtEgXBHAc4SjvWfQCdpUfK4yTCP2DhieU5cLE8DOYJRgncN06cehAHATLE5KXRC6nCGug2kyDHMBf%2Bcw4IlUt5XQCDwcoAw%2BDq0HUuJnLBJHWC1JwTpXb7%2BdMYonoT0jisL2nScLtIIxUBrYN8PNM%2FdhXHGm8Wu%2FhkUSyXS82rFYVvLSzTGkgUjiAKt0YUSo0onLFEwbVGQRb3ZBEQFULYKh4W7SZ0fKNuih1toVsDTfFhStkUG45stKtqF7hfB0SFUsU9Ae1MIgjDfHOCMKpYB2Fmf0Gmoz00m%2BuzGz28AKI3FOkzblZmnE5ylPL5WTO3bUhn7k6W6F0A%2F0WpHQpCH%2FkgwRdr11i2dLh3MmzICqAewRe4QmR%2BiItzsRJxpNv9Wifd%2BwijVCDxLkguWR6udMufthfkMYdRlPpcD8TsxOH5qwZXulGvVQ2dypzC0L%2Bm0R5y5wUgjpFXnsoyuuEeJd%2Fo9QeT3X1n9ej17b5Q7faF34TkWwqN6O334rO8WXrH22VDhX4lzCQIRFOIJbGCyZGJsOsFVxCMWSMXXhbBACToqTyMOmGxN9xjRAaYG8C6EAXRBHnHeBd5kLUqxqHEjjShI0voKJuHSkcpdg6f%2FQo41UVPLhBOmTza4NQBdo5M2FXCPeq5wq7OmpocdgPCx%2BkIH1cmfDSlLHVd7wkfTfD%2FK%2BpuZPjoVVNjIPioBfDkUGphLbXEWTmFjc9a7jmwloiWA4udCjtdxK%2BodRtgR3AAXgrVtrRC3DxgU6tfJ03jEutzGztHfTaCYddAs0O6yP2arGCJ0%2BHmq8P6b4f5g6s43We8JhWc7T5rxR7zfj4X%2Faass%2FILSPGi0ZmiSGfbWMUFCAK0CunqpOFoYrvfUEsdeSC4Zg82yPdpHzc0aP0TLNL%2B6AJi8iOdmzcz8%2FaYqc92Qlnj2WF%2FpLjYjlBMo2NwpXywTS6CvuuDweVK1OJ4uYzhKMTJnb8R9G4f4iSzqChOmT0tw2jhz%2FTuHkaIzAYFjixSzWLO0lhVcE110YTrzKqCL6OLcByIVXXjNFYV6xuaNT6rGtWo9mis%2BoDeHasayqx2yRRZ1XTOjlXrwvXv0YlWu3rR2eaRNDdaMEjt3tEbtaWjkf0gY%2FjoTU%2Bfpo%2F%2FNCDwbKMr8KSGDQ86muOlryfUF3gne0KCbWApLZ6QWN%2BdwBNymzPAXquiK7q%2F5AlVLIKKHr8Ind0QPMh1tqK4xiDr45BUwHW46U6lw8263UR5npFyGv0OqcPNs6RSS9zX7EulpjuN%2B2M7p7k%2Fk1Cp3Zx4MjiV8oJ4C8J61yorm4PQI1iJ2p2lup7eKE3T9z%2BwN%2FKYzICcbR7f1qZ%2BluFqw3C2EPyc0O8yxzN%2F5e1rqw0uspyNbaNvVMkUaVUZh1ZF%2BuYDbqRVMXXVmoBWzbpY%2FdkDtYFjfgG1fsDHgdc6rkmAamknATXEIeyDUnVClEoN0g%2BGUkOI9h%2FQNFGkydLPjcHeisgd0Z%2FonqPjfrCtUl%2FuxPFFq5ps%2BBEdOz5BxXxiHqdJf5lFXCjPfmZ1WbTpz7FQxwknisQ8PoWzrrQ0WsuqzPmnEHkIX9C0V5LJpU%2F6rzTIclJ9q17NJkha9EcV123fVDYxjuROnMpmjZcJ2SfuKC%2BVjX93K%2FIsqRadGJZTFdES64w8V%2Bypo%2BcxWLCv%2BQDN4MG%2BUq7DWwzINWq13jE4qyHXt7hvYrwyg4z7iiUgTRiB43r83SfidmYvyf6owDlO38wHS1TAHQ8QnBo1sZQGRd84MKEBD6N0rc9PRoy7zVIXZvm1Yz0U89qtWWYO92xfu%2FnBU78kUG%2FVN%2F8n3oGIOorKC6BP6GHk8ztyKRjkJr8vOodGDUWOduTSOS01oDUoOqBnOFwgtT0vQOmq4aSG38QTu1ZfDVfZFxCDD0PlBZj17zl1XKMqLGfw8G9XZL6VMG5F%2FJ3DuGJHEx%2B1PBxPf%2Fc2evfMJqmnNCvB0d7IEzIz7JEym8Tjb22ZTWJ9x56AwVSlOdox%2BMmOOQ6XKNp0yVm6sAMejG2O2d628coDHnzvRlrekarU%2BW%2BDUOqZJYt2zruXrMzFdPnee7JiAv9YRqEw4La8e7G%2B%2BzqjkNzm%2F4o3q57%2FR2P97n8%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E" allowtransparency="true"></iframe>
 	              </Card>
               </div>
             </div>
