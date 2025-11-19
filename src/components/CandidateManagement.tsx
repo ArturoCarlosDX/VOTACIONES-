@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Eye, EyeOff } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -31,16 +31,15 @@ interface CandidateManagementProps {
 }
 
 export function CandidateManagement({ category }: CandidateManagementProps) {
-  const { candidates, addCandidate, updateCandidate, deleteCandidate } =
-    useApp();
+  const { candidates, addCandidate, updateCandidate } = useApp();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [disableDialogOpen, setDisableDialogOpen] = useState(false);
   const [editingCandidate, setEditingCandidate] = useState<Candidate | null>(
     null
   );
-  const [deletingCandidateId, setDeletingCandidateId] = useState<string | null>(
-    null
-  );
+  const [disablingCandidateId, setDisablingCandidateId] = useState<
+    string | null
+  >(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -50,7 +49,10 @@ export function CandidateManagement({ category }: CandidateManagementProps) {
   });
 
   const categoryCandidates = candidates.filter((c) => c.category === category);
-  const sortedCandidates = [...categoryCandidates].sort(
+  const enabledCandidates = categoryCandidates.filter((c) => !c.disabled);
+  const disabledCandidates = categoryCandidates.filter((c) => c.disabled);
+
+  const sortedEnabledCandidates = [...enabledCandidates].sort(
     (a, b) => (b.votes ?? 0) - (a.votes ?? 0)
   );
 
@@ -83,26 +85,112 @@ export function CandidateManagement({ category }: CandidateManagementProps) {
       updateCandidate(editingCandidate.id, formData);
       toast.success("Candidato actualizado exitosamente");
     } else {
-      addCandidate({ ...formData, category });
+      addCandidate({ ...formData, category, disabled: false });
       toast.success("Candidato agregado exitosamente");
     }
 
     handleCloseDialog();
   };
 
-  const handleDeleteClick = (id: string) => {
-    setDeletingCandidateId(id);
-    setDeleteDialogOpen(true);
+  const handleDisableClick = (id: string) => {
+    setDisablingCandidateId(id);
+    setDisableDialogOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (deletingCandidateId) {
-      deleteCandidate(deletingCandidateId);
-      toast.success("Candidato eliminado exitosamente");
-      setDeleteDialogOpen(false);
-      setDeletingCandidateId(null);
+  const handleConfirmDisable = () => {
+    if (disablingCandidateId) {
+      const candidate = candidates.find((c) => c.id === disablingCandidateId);
+      if (candidate) {
+        updateCandidate(disablingCandidateId, {
+          disabled: !candidate.disabled,
+        });
+        toast.success(
+          candidate.disabled
+            ? "Candidato habilitado"
+            : "Candidato deshabilitado"
+        );
+      }
+      setDisableDialogOpen(false);
+      setDisablingCandidateId(null);
     }
   };
+
+  const CandidateCard = ({
+    candidate,
+    isDisabled,
+  }: {
+    candidate: Candidate;
+    isDisabled: boolean;
+  }) => (
+    <motion.div
+      key={candidate.id}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="h-full"
+    >
+      <Card
+        className={`h-full bg-transparent border shadow-none ${
+          isDisabled ? "border-red-300 opacity-60" : "border-border"
+        }`}
+      >
+        <CardHeader>
+          <div className="flex items-start gap-4">
+            <img
+              src={candidate.image}
+              alt={candidate.name}
+              className={`w-16 h-16 rounded-full object-cover ${
+                isDisabled ? "grayscale" : ""
+              }`}
+            />
+            <div className="flex-1">
+              <CardTitle className="text-lg mb-1">{candidate.name}</CardTitle>
+              <p className="text-sm text-muted-foreground">{candidate.party}</p>
+              {isDisabled && (
+                <p className="text-xs text-red-500 font-semibold mt-1">
+                  Deshabilitado
+                </p>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+            {candidate.description}
+          </p>
+          <p className="text-sm font-medium mb-4">Votos: {candidate.votes}</p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={() => handleOpenDialog(candidate)}
+            >
+              <Edit className="w-3 h-3 mr-1" />
+              Editar
+            </Button>
+            <Button
+              variant={isDisabled ? "default" : "destructive"}
+              size="sm"
+              className="flex-1"
+              onClick={() => handleDisableClick(candidate.id)}
+            >
+              {isDisabled ? (
+                <>
+                  <Eye className="w-3 h-3 mr-1" />
+                  Habilitar
+                </>
+              ) : (
+                <>
+                  <EyeOff className="w-3 h-3 mr-1" />
+                  Deshabilitar
+                </>
+              )}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
 
   return (
     <div>
@@ -116,64 +204,38 @@ export function CandidateManagement({ category }: CandidateManagementProps) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {sortedCandidates.map((candidate) => (
-          <motion.div
-            key={candidate.id}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="h-full"
-          >
-            <Card className="h-full bg-transparent border border-border shadow-none">
-              <CardHeader>
-                <div className="flex items-start gap-4">
-                  <img
-                    src={candidate.image}
-                    alt={candidate.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <CardTitle className="text-lg mb-1">
-                      {candidate.name}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {candidate.party}
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                  {candidate.description}
-                </p>
-                <p className="text-sm font-medium mb-4">
-                  Votos: {candidate.votes}
-                </p>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => handleOpenDialog(candidate)}
-                  >
-                    <Edit className="w-3 h-3 mr-1" />
-                    Editar
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => handleDeleteClick(candidate.id)}
-                  >
-                    <Trash2 className="w-3 h-3 mr-1" />
-                    Eliminar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+      {/* Candidatos Habilitados */}
+      <div className="mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedEnabledCandidates.map((candidate) => (
+            <CandidateCard
+              key={candidate.id}
+              candidate={candidate}
+              isDisabled={false}
+            />
+          ))}
+        </div>
       </div>
+
+      {/* Candidatos Deshabilitados */}
+      {disabledCandidates.length > 0 && (
+        <div className="mt-12 pt-8 border-t border-border">
+          <h3 className="text-xl font-bold mb-6 text-red-500">
+            {category === "presidencia"
+              ? "Presidentes Deshabilitados"
+              : "Alcaldes Deshabilitados"}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {disabledCandidates.map((candidate) => (
+              <CandidateCard
+                key={candidate.id}
+                candidate={candidate}
+                isDisabled={true}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl">
@@ -251,19 +313,20 @@ export function CandidateManagement({ category }: CandidateManagementProps) {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={disableDialogOpen} onOpenChange={setDisableDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta acción no se puede deshacer. El candidato será eliminado
-              permanentemente.
+              {candidates.find((c) => c.id === disablingCandidateId)?.disabled
+                ? "Este candidato será habilitado nuevamente."
+                : "Este candidato será deshabilitado y no aparecerá para votar."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmDelete}>
-              Eliminar
+            <AlertDialogAction onClick={handleConfirmDisable}>
+              Confirmar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -45,10 +45,10 @@ export function VotingSection({
   >(null);
 
   const presidenciaCandidates = candidates.filter(
-    (c) => c.category === "presidencia"
+    (c) => c.category === "presidencia" && !c.disabled
   );
   const alcaldiaCandidates = candidates.filter(
-    (c) => c.category === "alcaldia"
+    (c) => c.category === "alcaldia" && !c.disabled
   );
 
   // Debug: log presidencia candidate images to help diagnose loading issues
@@ -105,16 +105,16 @@ export function VotingSection({
             categoryVoted && !isVotedCandidate ? "opacity-60" : ""
           }`}
         >
-
-
           {/* Image banner */}
-          <div className="relative w-full rounded-t-xl"
+          <div
+            className="relative w-full rounded-t-xl"
             style={{
-            backgroundImage: "url('/images/fondo.jpg')",
-            backgroundSize: "cover",
+              backgroundImage: "url('/images/fondo.jpg')",
+              backgroundSize: "cover",
               backgroundPosition: "center",
-              height: "120px",  // altura real para mostrar fondo
-              }}>
+              height: "120px", // altura real para mostrar fondo
+            }}
+          >
             <img
               src={candidate.image}
               alt={candidate.name}
@@ -134,8 +134,6 @@ export function VotingSection({
               </div>
             </div>
           </div>
-
-
 
           <CardContent>
             <div className="mt-2">

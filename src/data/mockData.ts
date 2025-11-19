@@ -7,6 +7,7 @@ export interface Candidate {
 	image: string;
 	category: "presidencia" | "alcaldia";
 	votes: number;
+	disabled?: boolean;
 }
 
 export interface Admin {
